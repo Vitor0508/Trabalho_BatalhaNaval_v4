@@ -29,7 +29,7 @@ public class TelaInicialController implements Initializable {
     private Button Sair;
 
     private Stage stageIniciarJogo;
-    private TelaBatalhaNavalController telaBatalhaNavalController;
+    //private TelaBatalhaNavalController telaBatalhaNavalController;
 
     @FXML
     void ButtonNovoJogo(ActionEvent event) {

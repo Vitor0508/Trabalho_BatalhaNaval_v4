@@ -2,8 +2,9 @@ package batalha_naval.Model;
 
 public class Submarino extends Barco {
     static final int tamanho = 2;
-    private int partes[] = { 0, 0 };
+    private int partes = 2;
     private boolean vertical = false;
+    private int posicaoPartes[][] = new int[2][2];
 
     // posicao inicial
     private int x;
@@ -19,11 +20,11 @@ public class Submarino extends Barco {
         return nome;
     }
 
-    public int[] getPartes() {
+    public int getPartes() {
         return partes;
     }
 
-    public void setPartes(int[] partes) {
+    public void setPartes(int partes) {
         this.partes = partes;
     }
 
@@ -54,5 +55,25 @@ public class Submarino extends Barco {
     public Submarino() {
         super();
     }
+
+    public int[][] getPosicaoPartes() {
+        return posicaoPartes;
+    }
+
+    public void setPosicaoPartes() {
+        if(!isVertical()){
+            this.posicaoPartes[0][0] = this.x;
+            this.posicaoPartes[0][1] = this.y;
+            this.posicaoPartes[1][0] = this.x;
+            this.posicaoPartes[1][1] = this.y+1;
+        }else{
+            this.posicaoPartes[0][0] = this.x;
+            this.posicaoPartes[0][1] = this.y;
+            this.posicaoPartes[1][0] = this.x+1;
+            this.posicaoPartes[1][1] = this.y;
+        }
+    }
+
+    
 
 }

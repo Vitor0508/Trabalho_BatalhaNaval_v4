@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import batalha_naval.Model.Acertou;
 import batalha_naval.Model.Barco;
 import batalha_naval.Model.Couracado;
 import batalha_naval.Model.PortaAviao;
@@ -16,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -82,11 +84,14 @@ public class TelaBatalhaNavalController implements Initializable {
     private Tabuleiro tabuleiro2;
     private boolean isPosicionando = false;
     private ArrayList<Barco> barcos = new ArrayList<Barco>();
+    private ArrayList<Barco> barcos2 = new ArrayList<Barco>();
     private Posiciona posiciona;
     private int qtdSubmarino = 0;
     private int qtdCouracado = 0;
     private int qtdPortaAviao = 0;
     private boolean isPosInvalida = false;
+    private Acertou acertou1;
+    private Acertou acertou2;
 
     @FXML
     void ButtonIsVerticalClicado(ActionEvent event) {
@@ -107,6 +112,8 @@ public class TelaBatalhaNavalController implements Initializable {
 
     @FXML
     void ButtonCoura2Clicado(ActionEvent event) {
+        nomeBarco = "Couracado";
+        isPosicionando = false;
 
     }
 
@@ -119,16 +126,64 @@ public class TelaBatalhaNavalController implements Initializable {
 
     @FXML
     void ButtonPorta2Clicado(ActionEvent event) {
+        nomeBarco = "Portaviao";
+        isPosicionando = false;
 
     }
 
     @FXML
     void ButtonPosicionar2Clicado(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Batalha Naval");
+        alert.setHeaderText("Jogo Irá começar");
+        alert.setContentText("O jogo irá começar, boa sorte!");
+        alert.showAndWait();
+        for (int i = 0; i < buttons1.length; i++) {
+            for (int j = 0; j < buttons1[i].length; j++) {
+                buttons1[i][j].setStyle("-fx-background-color: blue;");
+                buttons1[i][j].setTextFill(Color.BLUE);
+                buttons1[i][j].setDisable(false);
+                buttons2[i][j].setStyle("-fx-background-color: blue;");
+                buttons2[i][j].setTextFill(Color.BLUE);
+                buttons2[i][j].setDisable(false);
+                buttons1[i][j].setOnAction(new ButtonAtirarClick());
+            }
+        }
+        ButtonPosicionar1.setVisible(false);
+        ButtonPosicionar2.setVisible(false);
+        ButtonPosicionar1.setDisable(true);
+        ButtonPosicionar2.setDisable(true);
+        ButtonCoura1.setVisible(false);
+        ButtonCoura2.setVisible(false);
+        ButtonPorta1.setVisible(false);
+        ButtonPorta2.setVisible(false);
+        ButtonSub1.setVisible(false);
+        ButtonSub2.setVisible(false);
+        ButtonIsVertical.setVisible(false);
+        acertou1 = new Acertou();
+        acertou2 = new Acertou();
+        acertou1.setTabuleiro(tabuleiro1);
+        acertou2.setTabuleiro(tabuleiro2);
+        acertou1.setBarcos(barcos);
+        acertou2.setBarcos(barcos2);
 
     }
 
     @FXML
     void ButtonPosicionarClicado1(ActionEvent event) {
+        for (int i = 0; i < buttons1.length; i++) {
+            for (int j = 0; j < buttons1[i].length; j++) {
+                buttons1[i][j].setStyle("-fx-background-color: blue;");
+                buttons1[i][j].setTextFill(Color.BLUE);
+                buttons1[i][j].setDisable(true);
+                buttons2[i][j].setDisable(false);
+            }
+        }
+        qtdCouracado = 0;
+        qtdPortaAviao = 0;
+        qtdSubmarino = 0;
+        ButtonPosicionar1.setDisable(true);
+        ButtonPosicionar1.setVisible(true);
 
     }
 
@@ -142,6 +197,7 @@ public class TelaBatalhaNavalController implements Initializable {
     @FXML
     void ButtonSub2Clicado(ActionEvent event) {
         nomeBarco = "Submarino";
+        isPosicionando = false;
 
     }
 
@@ -170,15 +226,101 @@ public class TelaBatalhaNavalController implements Initializable {
             for (int j = 0; j < buttons2[i].length; j++) { // Corrigir a condição de parada do loop interno
                 buttons2[i][j] = new Button();
                 buttons2[i][j].setPrefSize(50, 50);
-                // buttons2[i][j].setOnAction(new ButtonClickHandler());
-                buttons2[i][j].setOnMouseEntered(new Mouseacima());
-                buttons2[i][j].setOnMouseExited(new MouseFora());
+                buttons2[i][j].setOnAction(new ButtonClickHandler2());
+                buttons2[i][j].setDisable(true);
+                buttons2[i][j].setOnMouseEntered(new Mouseacima2());
+                buttons2[i][j].setOnMouseExited(new MouseFora2());
                 buttons2[i][j].setText("A");
                 buttons2[i][j].setTextFill(Color.BLUE);
                 buttons2[i][j].setStyle("-fx-background-color: blue;");
                 GridPane2.add(buttons2[i][j], j, i); // Inverter a ordem das coordenadas i e j para corresponder à
                                                      // matriz
             }
+        }
+    }
+
+    private class ButtonAtirarClick implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            Button clickedButton = (Button) event.getSource();
+            int row = GridPane.getRowIndex(clickedButton);
+            int col = GridPane.getColumnIndex(clickedButton);
+            int val = acertou1.acertou(row, col);
+            if (val == 2) {
+                clickedButton.setStyle("-fx-background-color: red;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Acertou submarino");
+                alert.setHeaderText("Acertou submarino");
+                alert.setContentText("Acertou submarino");
+                alert.showAndWait();
+
+            }
+            if (val == 3) {
+                System.out.println("Afundou sub");
+                clickedButton.setStyle("-fx-background-color: red;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Afundou submarino");
+                alert.setHeaderText("Afundou submarino");
+                alert.setContentText("Afundou submarino");
+                alert.showAndWait();
+            }
+            if (val == 4) {
+                System.out.println("Acertou coura");
+                clickedButton.setStyle("-fx-background-color: red;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Acertou Couracado");
+                alert.setHeaderText("Acertou Couracado");
+                alert.setContentText("Acertou Couracado");
+                alert.showAndWait();
+            }
+            if (val == 5) {
+                System.out.println("Afundou coura");
+                clickedButton.setStyle("-fx-background-color: red;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Afundou Couracado");
+                alert.setHeaderText("Afundou Couracado");
+                alert.setContentText("Afundou Couracado");
+                alert.showAndWait();
+            }
+            if (val == 6) {
+                System.out.println("Acertou Porta avião");
+                clickedButton.setStyle("-fx-background-color: red;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Acertou Porta aviao");
+                alert.setHeaderText("Acertou Porta aviao");
+                alert.setContentText("Acertou Porta aviao");
+                alert.showAndWait();
+            }
+
+            if (val == 7) {
+                System.out.println("Afundou porta");
+                clickedButton.setStyle("-fx-background-color: red;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Afundou Porta aviao");
+                alert.setHeaderText("Afundou Porta aviao");
+                alert.setContentText("Afundou Porta aviao");
+                alert.showAndWait();
+            }
+
+            if (val == -1) {
+                clickedButton.setStyle("-fx-background-color: white;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+            }
+            tabuleiro1.mostrarTabuleiro();
+
         }
     }
 
@@ -190,7 +332,7 @@ public class TelaBatalhaNavalController implements Initializable {
             int col = GridPane.getColumnIndex(clickedButton);
             if (nomeBarco == "Submarino") {
                 if (isvertical) {
-                    if (ehValido(row, col, tabuleiro1) && ehValido(row, col + 1, tabuleiro1)) {
+                    if (ehValido(row, col, tabuleiro1) && ehValido(row, col + 1, tabuleiro1) && qtdSubmarino < 3) {
                         System.out.println("Botão clicado: " + row + " " + col);
                         if (buttons1[row][col].isDisable() == false && buttons1[row][col + 1].isDisable() == false) {
                             buttons1[row][col].setText("S");
@@ -199,17 +341,14 @@ public class TelaBatalhaNavalController implements Initializable {
                             buttons1[row][col + 1].setDisable(true);
                             isPosicionando = true;
                             nomeBarco = "";
-                            if (qtdSubmarino < 3) {
-                                Submarino sub = new Submarino();
-                                barcos.add(sub);
-                                posiciona.setTabuleiro(tabuleiro1);
-                                posiciona.setSubmarino(sub);
-                                posiciona.posicionaBarco(sub, row, col);
-                                tabuleiro1.mostrarTabuleiro();
-                                qtdSubmarino++;
-                            } else {
-                                System.out.println("Você já posicionou todos os submarinos");
-                            }
+                            Submarino sub = new Submarino();
+                            barcos.add(sub);
+                            posiciona.setTabuleiro(tabuleiro1);
+                            posiciona.setSubmarino(sub);
+                            posiciona.posicionaBarco(sub, row, col);
+                            tabuleiro1.mostrarTabuleiro();
+                            qtdSubmarino++;
+
                         } else {
                             System.out.println("Posição inválida");
                             isPosInvalida = true;
@@ -218,7 +357,7 @@ public class TelaBatalhaNavalController implements Initializable {
                     }
 
                 } else {
-                    if (ehValido(row + 1, col, tabuleiro1) && ehValido(row, col, tabuleiro1)) {
+                    if (ehValido(row + 1, col, tabuleiro1) && ehValido(row, col, tabuleiro1) && qtdSubmarino < 3) {
                         if (buttons1[row][col].isDisable() == false && buttons1[row + 1][col].isDisable() == false) {
                             buttons1[row][col].setText("S");
                             buttons1[row + 1][col].setText("S");
@@ -269,17 +408,13 @@ public class TelaBatalhaNavalController implements Initializable {
                             buttons1[row][col + 3].setDisable(true);
                             isPosicionando = true;
                             nomeBarco = "";
-                            if (qtdCouracado < 2) {
-                                Couracado cour = new Couracado();
-                                barcos.add(cour);
-                                posiciona.setTabuleiro(tabuleiro1);
-                                posiciona.setCouracado(cour);
-                                posiciona.posicionaBarco(cour, row, col);
-                                tabuleiro1.mostrarTabuleiro();
-                                qtdCouracado++;
-                            } else {
-                                System.out.println("Você já posicionou todos os couraçados");
-                            }
+                            Couracado cour = new Couracado();
+                            barcos.add(cour);
+                            posiciona.setTabuleiro(tabuleiro1);
+                            posiciona.setCouracado(cour);
+                            posiciona.posicionaBarco(cour, row, col);
+                            tabuleiro1.mostrarTabuleiro();
+                            qtdCouracado++;
                         } else {
                             System.out.println("Posição inválida");
                             isPosInvalida = true;
@@ -403,6 +538,232 @@ public class TelaBatalhaNavalController implements Initializable {
 
                 }
             }
+            if (qtdSubmarino == 3 && qtdCouracado == 2 && qtdPortaAviao == 1) {
+                ButtonPosicionar1.setVisible(true);
+
+            }
+        }
+
+    }
+
+    private class ButtonClickHandler2 implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            Button clickedButton = (Button) event.getSource();
+            int row = GridPane.getRowIndex(clickedButton);
+            int col = GridPane.getColumnIndex(clickedButton);
+            if (nomeBarco == "Submarino") {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2) && qtdSubmarino < 3) {
+                        System.out.println("Botão clicado: " + row + " " + col);
+                        if (buttons2[row][col].isDisable() == false && buttons2[row][col + 1].isDisable() == false) {
+                            buttons2[row][col].setText("S");
+                            buttons2[row][col + 1].setText("S");
+                            buttons2[row][col].setDisable(true);
+                            buttons2[row][col + 1].setDisable(true);
+                            isPosicionando = true;
+                            nomeBarco = "";
+                            Submarino sub = new Submarino();
+                            barcos2.add(sub);
+                            posiciona.setTabuleiro(tabuleiro2);
+                            posiciona.setSubmarino(sub);
+                            posiciona.posicionaBarco(sub, row, col);
+                            tabuleiro2.mostrarTabuleiro();
+                            qtdSubmarino++;
+
+                        } else {
+                            System.out.println("Posição inválida");
+                            isPosInvalida = true;
+                        }
+
+                    }
+
+                } else {
+                    if (ehValido(row + 1, col, tabuleiro2) && ehValido(row, col, tabuleiro2) && qtdSubmarino < 3) {
+                        if (buttons2[row][col].isDisable() == false && buttons2[row + 1][col].isDisable() == false) {
+                            buttons2[row][col].setText("S");
+                            buttons2[row + 1][col].setText("S");
+                            buttons2[row][col].setDisable(true);
+                            buttons2[row + 1][col].setDisable(true);
+                            isPosicionando = true;
+                            nomeBarco = "";
+                            Submarino sub = new Submarino();
+                            barcos2.add(sub);
+                            posiciona.setTabuleiro(tabuleiro2);
+                            posiciona.setSubmarino(sub);
+                            posiciona.posicionaBarcovertical(sub, row, col);
+                            tabuleiro2.mostrarTabuleiro();
+                            qtdSubmarino++;
+
+                        }
+                    } else {
+                        System.out.println("Posição inválida");
+                        isPosInvalida = true;
+                    }
+
+                }
+                if (qtdSubmarino == 3) {
+                    ButtonSub2.setDisable(true);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Aviso");
+                    alert.setHeaderText("Você já posicionou todos os porta-aviões");
+                    alert.showAndWait();
+
+                }
+            }
+            if (nomeBarco == "Couracado") {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)
+                            && ehValido(row, col + 2, tabuleiro2) && ehValido(row, col + 3, tabuleiro2)
+                            && qtdCouracado < 2) {
+                        System.out.println("Botão clicado: " + row + " " + col);
+                        if (buttons2[row][col].isDisable() == false && buttons2[row][col + 1].isDisable() == false
+                                && buttons2[row][col + 2].isDisable() == false
+                                && buttons2[row][col + 3].isDisable() == false) {
+                            buttons2[row][col].setText("C");
+                            buttons2[row][col + 1].setText("C");
+                            buttons2[row][col + 2].setText("C");
+                            buttons2[row][col + 3].setText("C");
+                            buttons2[row][col].setDisable(true);
+                            buttons2[row][col + 1].setDisable(true);
+                            buttons2[row][col + 2].setDisable(true);
+                            buttons2[row][col + 3].setDisable(true);
+                            isPosicionando = true;
+                            nomeBarco = "";
+                            Couracado cour = new Couracado();
+                            barcos2.add(cour);
+                            posiciona.setTabuleiro(tabuleiro2);
+                            posiciona.setCouracado(cour);
+                            posiciona.posicionaBarco(cour, row, col);
+                            tabuleiro2.mostrarTabuleiro();
+                            qtdCouracado++;
+
+                        } else {
+                            System.out.println("Posição inválida");
+                            isPosInvalida = true;
+                        }
+
+                    }
+
+                } else {
+                    if (ehValido(row + 1, col, tabuleiro2) && ehValido(row, col, tabuleiro2)
+                            && ehValido(row + 2, col, tabuleiro2) && ehValido(row + 3, col, tabuleiro2)
+                            && qtdCouracado < 2) {
+                        if (buttons2[row][col].isDisable() == false && buttons2[row + 1][col].isDisable() == false
+                                && buttons2[row + 2][col].isDisable() == false
+                                && buttons2[row + 3][col].isDisable() == false) {
+                            buttons2[row][col].setText("C");
+                            buttons2[row + 1][col].setText("C");
+                            buttons2[row + 2][col].setText("C");
+                            buttons2[row + 3][col].setText("C");
+                            buttons2[row][col].setDisable(true);
+                            buttons2[row + 1][col].setDisable(true);
+                            buttons2[row + 2][col].setDisable(true);
+                            buttons2[row + 3][col].setDisable(true);
+                            isPosicionando = true;
+                            nomeBarco = "";
+                            Couracado cour = new Couracado();
+                            barcos2.add(cour);
+                            posiciona.setTabuleiro(tabuleiro2);
+                            posiciona.setCouracado(cour);
+                            posiciona.posicionaBarcovertical(cour, row, col);
+                            tabuleiro2.mostrarTabuleiro();
+                            qtdCouracado++;
+
+                        } else {
+                            System.out.println("Posição inválida");
+                            isPosInvalida = true;
+                        }
+                    }
+                }
+                if (qtdCouracado == 2) {
+                    ButtonCoura2.setDisable(true);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Aviso");
+                    alert.setHeaderText("Você já posicionou todos os Couraçados");
+                    alert.showAndWait();
+
+                }
+            }
+            if (nomeBarco == "Portaviao") {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)
+                            && ehValido(row, col + 2, tabuleiro2) && ehValido(row, col + 3, tabuleiro2)
+                            && ehValido(row, col + 4, tabuleiro2) && qtdPortaAviao < 1) {
+                        System.out.println("Botão clicado: " + row + " " + col);
+                        if (buttons2[row][col].isDisable() == false && buttons2[row][col + 1].isDisable() == false
+                                && buttons2[row][col + 2].isDisable() == false
+                                && buttons2[row][col + 3].isDisable() == false
+                                && buttons2[row][col + 4].isDisable() == false) {
+                            buttons2[row][col].setText("P");
+                            buttons2[row][col + 1].setText("P");
+                            buttons2[row][col + 2].setText("P");
+                            buttons2[row][col + 3].setText("P");
+                            buttons2[row][col + 4].setText("P");
+                            buttons2[row][col].setDisable(true);
+                            buttons2[row][col + 1].setDisable(true);
+                            buttons2[row][col + 2].setDisable(true);
+                            buttons2[row][col + 3].setDisable(true);
+                            buttons2[row][col + 4].setDisable(true);
+                            isPosicionando = true;
+                            nomeBarco = "";
+                            PortaAviao porta = new PortaAviao();
+                            barcos2.add(porta);
+                            posiciona.setTabuleiro(tabuleiro2);
+                            posiciona.setPortaAviao(porta);
+                            posiciona.posicionaBarco(porta, row, col);
+                            tabuleiro2.mostrarTabuleiro();
+                            qtdPortaAviao++;
+                        } else {
+                            System.out.println("Posição inválida");
+                            isPosInvalida = true;
+                        }
+                    }
+                } else {
+                    if (ehValido(row + 1, col, tabuleiro2) && ehValido(row, col, tabuleiro2)
+                            && ehValido(row + 2, col, tabuleiro2) && ehValido(row + 3, col, tabuleiro2)
+                            && ehValido(row + 4, col, tabuleiro2) && qtdPortaAviao < 1) {
+                        if (buttons2[row][col].isDisable() == false && buttons2[row + 1][col].isDisable() == false
+                                && buttons2[row + 2][col].isDisable() == false
+                                && buttons2[row + 3][col].isDisable() == false
+                                && buttons2[row + 4][col].isDisable() == false) {
+                            buttons2[row][col].setText("P");
+                            buttons2[row + 1][col].setText("P");
+                            buttons2[row + 2][col].setText("P");
+                            buttons2[row + 3][col].setText("P");
+                            buttons2[row + 4][col].setText("P");
+                            buttons2[row][col].setDisable(true);
+                            buttons2[row + 1][col].setDisable(true);
+                            buttons2[row + 2][col].setDisable(true);
+                            buttons2[row + 3][col].setDisable(true);
+                            buttons2[row + 4][col].setDisable(true);
+                            isPosicionando = true;
+                            nomeBarco = "";
+                            PortaAviao porta = new PortaAviao();
+                            barcos2.add(porta);
+                            posiciona.setTabuleiro(tabuleiro2);
+                            posiciona.setPortaAviao(porta);
+                            posiciona.posicionaBarcovertical(porta, row, col);
+                            tabuleiro2.mostrarTabuleiro();
+                            qtdPortaAviao++;
+                        } else {
+                            System.out.println("Posição inválida");
+                            isPosInvalida = true;
+                        }
+                    }
+                }
+                if (qtdPortaAviao == 1) {
+                    ButtonPorta2.setDisable(true);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Aviso");
+                    alert.setHeaderText("Você já posicionou todos os porta-aviões");
+                    alert.showAndWait();
+
+                }
+            }
+            if (qtdSubmarino == 3 && qtdCouracado == 2 && qtdPortaAviao == 1) {
+                ButtonPosicionar2.setVisible(true);
+            }
         }
     }
 
@@ -482,6 +843,79 @@ public class TelaBatalhaNavalController implements Initializable {
 
     }
 
+    private class Mouseacima2 implements EventHandler<MouseEvent> {
+        @Override
+        public void handle(MouseEvent event) {
+            Button hoveredButton = (Button) event.getSource();
+            int row = GridPane.getRowIndex(hoveredButton);
+            int col = GridPane.getColumnIndex(hoveredButton);
+            if (nomeBarco == "Submarino" && !isPosicionando) {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)) {
+                        if (buttons2[row][col].isDisable() == false && buttons2[row][col + 1].isDisable() == false) {
+                            buttons2[row][col].setStyle("-fx-background-color: red;");
+                            buttons2[row][col + 1].setStyle("-fx-background-color: red;");
+                        }
+                    } else {
+                        System.out.println("Posição inválida");
+                    }
+                } else {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row + 1, col, tabuleiro2)) {
+                        if (buttons2[row][col].isDisable() == false && buttons2[row + 1][col].isDisable() == false) {
+                            buttons2[row][col].setStyle("-fx-background-color: red;");
+                            buttons2[row + 1][col].setStyle("-fx-background-color: red;");
+                        }
+                    } else {
+                        System.out.println("Posição inválida");
+                    }
+                }
+            }
+            if (nomeBarco == "Couracado" && !isPosicionando) {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)
+                            && ehValido(row, col + 2, tabuleiro2) && ehValido(row, col + 3, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: red;");
+                        buttons2[row][col + 1].setStyle("-fx-background-color: red;");
+                        buttons2[row][col + 2].setStyle("-fx-background-color: red;");
+                        buttons2[row][col + 3].setStyle("-fx-background-color: red;");
+                    }
+                } else {
+                    if (ehValido(row + 1, col, tabuleiro2) && ehValido(row, col, tabuleiro2)
+                            && ehValido(row + 2, col, tabuleiro2) && ehValido(row + 3, col, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: red;");
+                        buttons2[row + 1][col].setStyle("-fx-background-color: red;");
+                        buttons2[row + 2][col].setStyle("-fx-background-color: red;");
+                        buttons2[row + 3][col].setStyle("-fx-background-color: red;");
+                    }
+
+                }
+            }
+            if (nomeBarco == "Portaviao" && !isPosicionando) {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)
+                            && ehValido(row, col + 2, tabuleiro2) && ehValido(row, col + 3, tabuleiro2)
+                            && ehValido(row, col + 4, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: red;");
+                        buttons2[row][col + 1].setStyle("-fx-background-color: red;");
+                        buttons2[row][col + 2].setStyle("-fx-background-color: red;");
+                        buttons2[row][col + 3].setStyle("-fx-background-color: red;");
+                        buttons2[row][col + 4].setStyle("-fx-background-color: red;");
+                    }
+                } else {
+                    if (ehValido(row + 1, col, tabuleiro2) && ehValido(row, col, tabuleiro2)
+                            && ehValido(row + 2, col, tabuleiro2) && ehValido(row + 3, col, tabuleiro2)
+                            && ehValido(row + 4, col, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: red;");
+                        buttons2[row + 1][col].setStyle("-fx-background-color: red;");
+                        buttons2[row + 2][col].setStyle("-fx-background-color: red;");
+                        buttons2[row + 3][col].setStyle("-fx-background-color: red;");
+                        buttons2[row + 4][col].setStyle("-fx-background-color: red;");
+                    }
+                }
+            }
+        }
+    }
+
     private class MouseFora implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent event) {
@@ -554,6 +988,81 @@ public class TelaBatalhaNavalController implements Initializable {
 
             // Realize as ações desejadas quando o mouse é movido sobre o botão
             // Por exemplo, alterar a cor do botão, exibir informações adicionais, etc.
+        }
+    }
+
+    private class MouseFora2 implements EventHandler<MouseEvent> {
+        @Override
+        public void handle(MouseEvent event) {
+            Button hoveredButton = (Button) event.getSource();
+            int row = GridPane.getRowIndex(hoveredButton);
+            int col = GridPane.getColumnIndex(hoveredButton);
+            if (nomeBarco == "Submarino" && !isPosicionando) {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)) {
+                        if (!buttons2[row][col].isDisable() && !buttons2[row][col + 1].isDisable()) {
+                            buttons2[row][col].setStyle("-fx-background-color: blue;");
+                            buttons2[row][col + 1].setStyle("-fx-background-color: blue;");
+                        }
+                    } else {
+                        System.out.println("Posição inválida");
+                    }
+                } else {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row + 1, col, tabuleiro2)) {
+                        if (!buttons2[row][col].isDisable() && !buttons2[row + 1][col].isDisable()) {
+                            buttons2[row][col].setStyle("-fx-background-color: blue;");
+                            buttons2[row + 1][col].setStyle("-fx-background-color: blue;");
+                        }
+                    } else {
+                        System.out.println("Posição inválida");
+                    }
+                }
+            }
+            if (nomeBarco == "Couracado" && !isPosicionando) {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)
+                            && ehValido(row, col + 2, tabuleiro2) && ehValido(row, col + 3, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row][col + 1].setStyle("-fx-background-color: blue;");
+                        buttons2[row][col + 2].setStyle("-fx-background-color: blue;");
+                        buttons2[row][col + 3].setStyle("-fx-background-color: blue;");
+                    }
+                } else {
+                    if (ehValido(row + 1, col, tabuleiro2) && ehValido(row, col, tabuleiro2)
+                            && ehValido(row + 2, col, tabuleiro2) && ehValido(row + 3, col, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row + 1][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row + 2][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row + 3][col].setStyle("-fx-background-color: blue;");
+                    }
+                }
+            }
+            if (nomeBarco == "Portaviao" && !isPosicionando) {
+                if (isvertical) {
+                    if (ehValido(row, col, tabuleiro2) && ehValido(row, col + 1, tabuleiro2)
+                            && ehValido(row, col + 2, tabuleiro2) && ehValido(row, col + 3, tabuleiro2)
+                            && ehValido(row, col + 4, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row][col + 1].setStyle("-fx-background-color: blue;");
+                        buttons2[row][col + 2].setStyle("-fx-background-color: blue;");
+                        buttons2[row][col + 3].setStyle("-fx-background-color: blue;");
+                        buttons2[row][col + 4].setStyle("-fx-background-color: blue;");
+                    }
+                } else {
+                    if (ehValido(row + 1, col, tabuleiro2) && ehValido(row, col, tabuleiro2)
+                            && ehValido(row + 2, col, tabuleiro2) && ehValido(row + 3, col, tabuleiro2)
+                            && ehValido(row + 4, col, tabuleiro2)) {
+                        buttons2[row][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row + 1][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row + 2][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row + 3][col].setStyle("-fx-background-color: blue;");
+                        buttons2[row + 4][col].setStyle("-fx-background-color: blue;");
+                    }
+                }
+            }
+
+            // Realize as ações desejadas quando o mouse sai do botão
+            // Por exemplo, alterar a cor do botão de volta ao estado original, etc.
         }
     }
 

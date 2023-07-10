@@ -15,9 +15,9 @@ public abstract class Barco {
 
     public abstract String getNome();
 
-    public abstract int[] getPartes();
+    public abstract int getPartes();
 
-    public abstract void setPartes(int[] partes);
+    public abstract void setPartes(int partes);
 
     public abstract boolean isVertical();
 
@@ -30,5 +30,10 @@ public abstract class Barco {
     public abstract int getY();
 
     public abstract void setY(int y);
+
+    public abstract int[][] getPosicaoPartes();
+
+    public abstract void setPosicaoPartes();
+    
 
 }
