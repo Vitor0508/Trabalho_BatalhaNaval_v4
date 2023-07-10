@@ -591,7 +591,7 @@ public class TelaBatalhaNavalController implements Initializable {
                     ButtonSub1.setDisable(true);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Aviso");
-                    alert.setHeaderText("Você já posicionou todos os porta-aviões");
+                    alert.setHeaderText("Você já posicionou todos os Submarinos");
                     alert.showAndWait();
 
                 }
@@ -813,7 +813,7 @@ public class TelaBatalhaNavalController implements Initializable {
                     ButtonSub2.setDisable(true);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Aviso");
-                    alert.setHeaderText("Você já posicionou todos os porta-aviões");
+                    alert.setHeaderText("Você já posicionou todos os Submarinos");
                     alert.showAndWait();
 
                 }
