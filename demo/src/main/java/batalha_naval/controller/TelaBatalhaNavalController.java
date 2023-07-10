@@ -393,26 +393,12 @@ public class TelaBatalhaNavalController implements Initializable {
                         alert.showAndWait();
                     }
 
-                    if (val == -1) {
-                        clickedButton.setStyle("-fx-background-color: white;");
-                        clickedButton.setTextFill(Color.BLACK);
-                        clickedButton.setDisable(true);
-                    }
-                    tabuleiro1.mostrarTabuleiro();
-                }
-                if (vez % 2 != 0) {
-                    int val = acertou2.acertou(row, col);
-                    GridPane1.setDisable(false);
-                    GridPane2.setDisable(true);
-                    if (val == 2) {
-                        clickedButton.setStyle("-fx-background-color: red;");
-                        clickedButton.setTextFill(Color.BLACK);
-                        clickedButton.setDisable(true);
-                        Alert alert = new Alert(AlertType.INFORMATION);
-                        alert.setTitle("Acertou submarino");
-                        alert.setHeaderText("Acertou submarino");
-                        alert.setContentText("Acertou submarino");
-                        alert.showAndWait();
+            if (val == -1) {
+                clickedButton.setStyle("-fx-background-color: white;");
+                clickedButton.setTextFill(Color.BLACK);
+                clickedButton.setDisable(true);
+            }
+            tabuleiro1.mostrarTabuleiro();
 
                     }
                     if (val == 3) {
