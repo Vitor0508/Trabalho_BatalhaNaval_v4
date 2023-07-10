@@ -154,18 +154,38 @@ public class TelaBatalhaNavalController implements Initializable {
         
         
 
+        buttons1 = new Button[10][10];
+        buttons2 = new Button[10][10];
+        tabuleiro1 = new Tabuleiro();
+        tabuleiro2 = new Tabuleiro();
+        posiciona = new Posiciona();
         for (int i = 0; i < buttons1.length; i++) {
-            for (int j = 0; j < buttons1[i].length; j++) {
-                buttons1[i][j].setStyle("-fx-background-color: blue;");
+            for (int j = 0; j < buttons1[i].length; j++) { // Corrigir a condição de parada do loop interno
+                buttons1[i][j] = new Button();
+                buttons1[i][j].setPrefSize(50, 50);
+                buttons1[i][j].setOnAction(new ButtonClickHandler1());
+                buttons1[i][j].setOnMouseEntered(new Mouseacima());
+                buttons1[i][j].setOnMouseExited(new MouseFora());
+                buttons1[i][j].setText("A");
                 buttons1[i][j].setTextFill(Color.BLUE);
-                buttons1[i][j].setDisable(false);
-                buttons1[i][j].setText("");
-                buttons2[i][j].setStyle("-fx-background-color: blue;");
+                buttons1[i][j].setStyle("-fx-background-color: blue;");
+                GridPane1.add(buttons1[i][j], j, i); // Inverter a ordem das coordenadas i e j para corresponder à
+                                                     // matriz
+            }
+        }
+        for (int i = 0; i < buttons2.length; i++) {
+            for (int j = 0; j < buttons2[i].length; j++) { // Corrigir a condição de parada do loop interno
+                buttons2[i][j] = new Button();
+                buttons2[i][j].setPrefSize(50, 50);
+                buttons2[i][j].setOnAction(new ButtonClickHandler2());
+                buttons2[i][j].setDisable(true);
+                buttons2[i][j].setOnMouseEntered(new Mouseacima2());
+                buttons2[i][j].setOnMouseExited(new MouseFora2());
+                buttons2[i][j].setText("A");
                 buttons2[i][j].setTextFill(Color.BLUE);
-                buttons2[i][j].setDisable(false);
-                buttons2[i][j].setText("");
-                buttons1[i][j].setOnAction(new ButtonAtirarClick());
-                buttons2[i][j].setOnAction(new ButtonAtirarClick());
+                buttons2[i][j].setStyle("-fx-background-color: blue;");
+                GridPane2.add(buttons2[i][j], j, i); // Inverter a ordem das coordenadas i e j para corresponder à
+                                                     // matriz
             }
         }
 
@@ -192,8 +212,10 @@ public class TelaBatalhaNavalController implements Initializable {
         ButtonIsVertical.setDisable(false);
         ButtonIsVertical.setVisible(true);
     
-        acertou1 = null;
-        acertou2 = null;
+        acertou1 = new Acertou();
+        acertou2 = new Acertou();
+        
+
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Batalha Naval");
@@ -569,7 +591,7 @@ public class TelaBatalhaNavalController implements Initializable {
                     ButtonSub1.setDisable(true);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Aviso");
-                    alert.setHeaderText("Você já posicionou todos os porta-aviões");
+                    alert.setHeaderText("Você já posicionou todos os Submarinos");
                     alert.showAndWait();
 
                 }
@@ -791,7 +813,7 @@ public class TelaBatalhaNavalController implements Initializable {
                     ButtonSub2.setDisable(true);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Aviso");
-                    alert.setHeaderText("Você já posicionou todos os porta-aviões");
+                    alert.setHeaderText("Você já posicionou todos os Submarinos");
                     alert.showAndWait();
 
                 }
