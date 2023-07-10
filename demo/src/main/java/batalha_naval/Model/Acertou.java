@@ -112,6 +112,7 @@ public class Acertou {
      */
 
     public int acertou(int x, int y) {
+        int retorno = -1;
         if (tabuleiro.getTabuleiro()[x][y] != 0) {
             System.out.println("Acertou");
             switch (tabuleiro.getTabuleiro()[x][y]) {
@@ -122,35 +123,37 @@ public class Acertou {
                                 barco.setPartes(barco.getPartes() - 1);
                                 System.out.println("Partes: " + barco.getPartes());
                                 tabuleiro.getTabuleiro()[x][y] = -1;
-                                return 2;
+                                retorno = 2;
                             }
                         }
-                        if (barco.getPartes() == 0) {
+                        if (barco.getPartes() == 0 && barco.isAfundado() == false) {
                             barco.setAfundado(true);
                             System.out.println("Afundou");
                             tabuleiro.getTabuleiro()[x][y] = -1;
-                            return 3;
+                            retorno = 3;
                         }
                     }
+                    return retorno;
 
                 case 4:
-                    // System.out.println("teste");
+                    System.out.println("Couraçado");
                     for (Barco barco : barcos) {
                         for (int i = 0; i < barco.getTamanho(); i++) {
                             if (barco.getPosicaoPartes()[i][0] == x && barco.getPosicaoPartes()[i][1] == y) {
                                 barco.setPartes(barco.getPartes() - 1);
                                 System.out.println("Partes: " + barco.getPartes());
                                 tabuleiro.getTabuleiro()[x][y] = -1;
-                                return 4;
+                                retorno = 4;
                             }
                         }
-                        if (barco.getPartes() == 0) {
+                        if (barco.getPartes() == 0 && barco.isAfundado() == false) {
                             barco.setAfundado(true);
                             System.out.println("Afundou");
                             tabuleiro.getTabuleiro()[x][y] = -1;
-                            return 5;
+                            retorno = 5;
                         }
                     }
+                    return retorno;
 
                 case 5:
                     System.out.println("Porta Aviao");
@@ -160,16 +163,17 @@ public class Acertou {
                                 barco.setPartes(barco.getPartes() - 1);
                                 System.out.println("Partes: " + barco.getPartes());
                                 tabuleiro.getTabuleiro()[x][y] = -1;
-                                return 6;
+                                retorno = 6;
                             }
                         }
-                        if (barco.getPartes() == 0) {
+                        if (barco.getPartes() == 0 && barco.isAfundado() == false) {
                             barco.setAfundado(true);
                             System.out.println("Afundou");
                             tabuleiro.getTabuleiro()[x][y] = -1;
-                            return 7;
+                            retorno = 7;
                         }
                     }
+                    return retorno;
             }
             tabuleiro.getTabuleiro()[x][y] = -1;
         }
@@ -177,7 +181,7 @@ public class Acertou {
             tabuleiro.getTabuleiro()[x][y] = -1;
         }
 
-        return -1;
+        return retorno;
 
     }
 

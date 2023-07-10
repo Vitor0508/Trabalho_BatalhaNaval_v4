@@ -319,6 +319,7 @@ public class TelaBatalhaNavalController implements Initializable {
                 clickedButton.setTextFill(Color.BLACK);
                 clickedButton.setDisable(true);
             }
+            System.out.println();
             tabuleiro1.mostrarTabuleiro();
 
         }
