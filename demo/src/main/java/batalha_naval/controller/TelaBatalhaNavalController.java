@@ -192,8 +192,12 @@ public class TelaBatalhaNavalController implements Initializable {
         ButtonIsVertical.setDisable(false);
         ButtonIsVertical.setVisible(true);
     
-        acertou1 = null;
-        acertou2 = null;
+        acertou1 = new Acertou();
+        acertou2 = new Acertou();
+        tabuleiro1 = new Tabuleiro();
+        tabuleiro2 = new Tabuleiro();
+        posiciona = new Posiciona();
+        
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Batalha Naval");
