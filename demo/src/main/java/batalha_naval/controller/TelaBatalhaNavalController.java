@@ -92,7 +92,6 @@ public class TelaBatalhaNavalController implements Initializable {
     private int qtdSubmarino = 0;
     private int qtdCouracado = 0;
     private int qtdPortaAviao = 0;
-    private boolean isPosInvalida = false;
     private Acertou acertou1;
     private Acertou acertou2;
     private int barcosAfundados1 = 0;
@@ -145,15 +144,16 @@ public class TelaBatalhaNavalController implements Initializable {
         qtdSubmarino = 0;
         qtdCouracado = 0;
         qtdPortaAviao = 0;
-        isPosInvalida = false;
         barcosAfundados1 = 0;
         barcosAfundados2 = 0;
         vez = 0;
         barcos.clear();
         barcos2.clear();
-        
-        
-
+        tabuleiro1 = null;
+        tabuleiro2 = null;
+        posiciona = null;
+        acertou1 = null;
+        acertou2 = null;
         buttons1 = new Button[10][10];
         buttons2 = new Button[10][10];
         tabuleiro1 = new Tabuleiro();
@@ -189,7 +189,6 @@ public class TelaBatalhaNavalController implements Initializable {
             }
         }
 
-        // Show or hide buttons as needed
         ButtonReiniciar.setVisible(false);
         GridPane1.setVisible(true);
         GridPane1.setDisable(false);
@@ -211,11 +210,6 @@ public class TelaBatalhaNavalController implements Initializable {
         ButtonSub2.setDisable(false);
         ButtonIsVertical.setDisable(false);
         ButtonIsVertical.setVisible(true);
-    
-        acertou1 = new Acertou();
-        acertou2 = new Acertou();
-        
-
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Batalha Naval");
@@ -558,7 +552,7 @@ public class TelaBatalhaNavalController implements Initializable {
 
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
 
                     }
@@ -583,7 +577,7 @@ public class TelaBatalhaNavalController implements Initializable {
                         }
                     } else {
                         System.out.println("Posição inválida");
-                        isPosInvalida = true;
+
                     }
 
                 }
@@ -624,7 +618,7 @@ public class TelaBatalhaNavalController implements Initializable {
                             qtdCouracado++;
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
 
                     }
@@ -656,7 +650,7 @@ public class TelaBatalhaNavalController implements Initializable {
 
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
                     }
                 }
@@ -700,7 +694,7 @@ public class TelaBatalhaNavalController implements Initializable {
                             qtdPortaAviao++;
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
                     }
                 } else {
@@ -732,7 +726,7 @@ public class TelaBatalhaNavalController implements Initializable {
                             qtdPortaAviao++;
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
                     }
                 }
@@ -780,7 +774,7 @@ public class TelaBatalhaNavalController implements Initializable {
 
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
 
                     }
@@ -805,7 +799,7 @@ public class TelaBatalhaNavalController implements Initializable {
                         }
                     } else {
                         System.out.println("Posição inválida");
-                        isPosInvalida = true;
+
                     }
 
                 }
@@ -847,7 +841,7 @@ public class TelaBatalhaNavalController implements Initializable {
 
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
 
                     }
@@ -879,7 +873,7 @@ public class TelaBatalhaNavalController implements Initializable {
 
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
                     }
                 }
@@ -923,7 +917,7 @@ public class TelaBatalhaNavalController implements Initializable {
                             qtdPortaAviao++;
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
                     }
                 } else {
@@ -955,7 +949,7 @@ public class TelaBatalhaNavalController implements Initializable {
                             qtdPortaAviao++;
                         } else {
                             System.out.println("Posição inválida");
-                            isPosInvalida = true;
+
                         }
                     }
                 }
