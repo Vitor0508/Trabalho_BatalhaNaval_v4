@@ -76,6 +76,9 @@ public class TelaBatalhaNavalController implements Initializable {
     @FXML
     private Text labelNomeJogador2;
 
+    @FXML
+    private Button ButtonReiniciar;
+
     private Button[][] buttons1;
     private Button[][] buttons2;
     private String nomeBarco;
@@ -92,6 +95,9 @@ public class TelaBatalhaNavalController implements Initializable {
     private boolean isPosInvalida = false;
     private Acertou acertou1;
     private Acertou acertou2;
+    private int barcosAfundados1 = 0;
+    private int barcosAfundados2 = 0;
+    private int vez = 0;
 
     @FXML
     void ButtonIsVerticalClicado(ActionEvent event) {
@@ -132,6 +138,71 @@ public class TelaBatalhaNavalController implements Initializable {
     }
 
     @FXML
+    void ButtonReiniciarClicado(ActionEvent event) {
+        nomeBarco = "";
+        isvertical = false;
+        isPosicionando = false;
+        qtdSubmarino = 0;
+        qtdCouracado = 0;
+        qtdPortaAviao = 0;
+        isPosInvalida = false;
+        barcosAfundados1 = 0;
+        barcosAfundados2 = 0;
+        vez = 0;
+        barcos.clear();
+        barcos2.clear();
+        
+        
+
+        for (int i = 0; i < buttons1.length; i++) {
+            for (int j = 0; j < buttons1[i].length; j++) {
+                buttons1[i][j].setStyle("-fx-background-color: blue;");
+                buttons1[i][j].setTextFill(Color.BLUE);
+                buttons1[i][j].setDisable(false);
+                buttons1[i][j].setText("");
+                buttons2[i][j].setStyle("-fx-background-color: blue;");
+                buttons2[i][j].setTextFill(Color.BLUE);
+                buttons2[i][j].setDisable(false);
+                buttons2[i][j].setText("");
+                buttons1[i][j].setOnAction(new ButtonAtirarClick());
+                buttons2[i][j].setOnAction(new ButtonAtirarClick());
+            }
+        }
+
+        // Show or hide buttons as needed
+        ButtonReiniciar.setVisible(false);
+        GridPane1.setVisible(true);
+        GridPane1.setDisable(false);
+        ButtonPosicionar1.setVisible(false);
+        ButtonPosicionar2.setVisible(false);
+        ButtonPosicionar1.setDisable(true);
+        ButtonPosicionar2.setDisable(true);
+        ButtonCoura1.setVisible(true);
+        ButtonCoura2.setVisible(true);
+        ButtonPorta1.setVisible(true);
+        ButtonPorta2.setVisible(true);
+        ButtonSub1.setVisible(true);
+        ButtonSub2.setVisible(true);
+        ButtonCoura1.setDisable(false);
+        ButtonCoura2.setDisable(false);
+        ButtonPorta1.setDisable(false);
+        ButtonPorta2.setDisable(false);
+        ButtonSub1.setDisable(false);
+        ButtonSub2.setDisable(false);
+        ButtonIsVertical.setDisable(false);
+        ButtonIsVertical.setVisible(true);
+    
+        acertou1 = null;
+        acertou2 = null;
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Batalha Naval");
+        alert.setHeaderText("Jogo reiniciado");
+        alert.setContentText("O jogo foi reiniciado com sucesso!");
+        alert.showAndWait();
+    }
+
+    @FXML
     void ButtonPosicionar2Clicado(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Batalha Naval");
@@ -147,6 +218,7 @@ public class TelaBatalhaNavalController implements Initializable {
                 buttons2[i][j].setTextFill(Color.BLUE);
                 buttons2[i][j].setDisable(false);
                 buttons1[i][j].setOnAction(new ButtonAtirarClick());
+                buttons2[i][j].setOnAction(new ButtonAtirarClick());
             }
         }
         ButtonPosicionar1.setVisible(false);
@@ -245,83 +317,196 @@ public class TelaBatalhaNavalController implements Initializable {
             Button clickedButton = (Button) event.getSource();
             int row = GridPane.getRowIndex(clickedButton);
             int col = GridPane.getColumnIndex(clickedButton);
-            int val = acertou1.acertou(row, col);
-            if (val == 2) {
-                clickedButton.setStyle("-fx-background-color: red;");
-                clickedButton.setTextFill(Color.BLACK);
-                clickedButton.setDisable(true);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Acertou submarino");
-                alert.setHeaderText("Acertou submarino");
-                alert.setContentText("Acertou submarino");
-                alert.showAndWait();
+            if (barcosAfundados1 != 6 || barcosAfundados2 != 6) {
+                if (vez % 2 == 0) {
+                    GridPane1.setDisable(true);
+                    GridPane2.setDisable(false);
+                    int val = acertou1.acertou(row, col);
+                    if (val == 2) {
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Acertou submarino");
+                        alert.setHeaderText("Acertou submarino");
+                        alert.setContentText("Acertou submarino");
+                        alert.showAndWait();
 
-            }
-            if (val == 3) {
-                System.out.println("Afundou sub");
-                clickedButton.setStyle("-fx-background-color: red;");
-                clickedButton.setTextFill(Color.BLACK);
-                clickedButton.setDisable(true);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Afundou submarino");
-                alert.setHeaderText("Afundou submarino");
-                alert.setContentText("Afundou submarino");
-                alert.showAndWait();
-            }
-            if (val == 4) {
-                System.out.println("Acertou coura");
-                clickedButton.setStyle("-fx-background-color: red;");
-                clickedButton.setTextFill(Color.BLACK);
-                clickedButton.setDisable(true);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Acertou Couracado");
-                alert.setHeaderText("Acertou Couracado");
-                alert.setContentText("Acertou Couracado");
-                alert.showAndWait();
-            }
-            if (val == 5) {
-                System.out.println("Afundou coura");
-                clickedButton.setStyle("-fx-background-color: red;");
-                clickedButton.setTextFill(Color.BLACK);
-                clickedButton.setDisable(true);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Afundou Couracado");
-                alert.setHeaderText("Afundou Couracado");
-                alert.setContentText("Afundou Couracado");
-                alert.showAndWait();
-            }
-            if (val == 6) {
-                System.out.println("Acertou Porta avião");
-                clickedButton.setStyle("-fx-background-color: red;");
-                clickedButton.setTextFill(Color.BLACK);
-                clickedButton.setDisable(true);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Acertou Porta aviao");
-                alert.setHeaderText("Acertou Porta aviao");
-                alert.setContentText("Acertou Porta aviao");
-                alert.showAndWait();
-            }
+                    }
+                    if (val == 3) {
+                        System.out.println("Afundou sub");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Afundou submarino");
+                        alert.setHeaderText("Afundou submarino");
+                        alert.setContentText("Afundou submarino");
+                        barcosAfundados1++;
+                        alert.showAndWait();
+                    }
+                    if (val == 4) {
+                        System.out.println("Acertou coura");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Acertou Couracado");
+                        alert.setHeaderText("Acertou Couracado");
+                        alert.setContentText("Acertou Couracado");
+                        alert.showAndWait();
+                    }
+                    if (val == 5) {
+                        System.out.println("Afundou coura");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Afundou Couracado");
+                        alert.setHeaderText("Afundou Couracado");
+                        alert.setContentText("Afundou Couracado");
+                        barcosAfundados1++;
+                        alert.showAndWait();
+                    }
+                    if (val == 6) {
+                        System.out.println("Acertou Porta avião");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Acertou Porta aviao");
+                        alert.setHeaderText("Acertou Porta aviao");
+                        alert.setContentText("Acertou Porta aviao");
+                        alert.showAndWait();
+                    }
 
-            if (val == 7) {
-                System.out.println("Afundou porta");
-                clickedButton.setStyle("-fx-background-color: red;");
-                clickedButton.setTextFill(Color.BLACK);
-                clickedButton.setDisable(true);
+                    if (val == 7) {
+                        System.out.println("Afundou porta");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Afundou Porta aviao");
+                        alert.setHeaderText("Afundou Porta aviao");
+                        alert.setContentText("Afundou Porta aviao");
+                        barcosAfundados1++;
+                        alert.showAndWait();
+                    }
+
+                    if (val == -1) {
+                        clickedButton.setStyle("-fx-background-color: white;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                    }
+                    tabuleiro1.mostrarTabuleiro();
+                }
+                if (vez % 2 != 0) {
+                    int val = acertou2.acertou(row, col);
+                    GridPane1.setDisable(false);
+                    GridPane2.setDisable(true);
+                    if (val == 2) {
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Acertou submarino");
+                        alert.setHeaderText("Acertou submarino");
+                        alert.setContentText("Acertou submarino");
+                        alert.showAndWait();
+
+                    }
+                    if (val == 3) {
+                        System.out.println("Afundou sub");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Afundou submarino");
+                        alert.setHeaderText("Afundou submarino");
+                        alert.setContentText("Afundou submarino");
+                        barcosAfundados2++;
+                        alert.showAndWait();
+                    }
+                    if (val == 4) {
+                        System.out.println("Acertou coura");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Acertou Couracado");
+                        alert.setHeaderText("Acertou Couracado");
+                        alert.setContentText("Acertou Couracado");
+                        alert.showAndWait();
+                    }
+                    if (val == 5) {
+                        System.out.println("Afundou coura");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Afundou Couracado");
+                        alert.setHeaderText("Afundou Couracado");
+                        alert.setContentText("Afundou Couracado");
+                        barcosAfundados2++;
+                        alert.showAndWait();
+                    }
+                    if (val == 6) {
+                        System.out.println("Acertou Porta avião");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Acertou Porta aviao");
+                        alert.setHeaderText("Acertou Porta aviao");
+                        alert.setContentText("Acertou Porta aviao");
+                        alert.showAndWait();
+                    }
+
+                    if (val == 7) {
+                        System.out.println("Afundou porta");
+                        clickedButton.setStyle("-fx-background-color: red;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Afundou Porta aviao");
+                        alert.setHeaderText("Afundou Porta aviao");
+                        alert.setContentText("Afundou Porta aviao");
+                        barcosAfundados2++;
+                        alert.showAndWait();
+                    }
+
+                    if (val == -1) {
+                        clickedButton.setStyle("-fx-background-color: white;");
+                        clickedButton.setTextFill(Color.BLACK);
+                        clickedButton.setDisable(true);
+                    }
+                    tabuleiro1.mostrarTabuleiro();
+                }
+                vez++;
+            }
+            if (barcosAfundados1 == 6) {
+                GridPane1.setDisable(true);
+                GridPane2.setDisable(true);
+                ButtonReiniciar.setVisible(true);
                 Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Afundou Porta aviao");
-                alert.setHeaderText("Afundou Porta aviao");
-                alert.setContentText("Afundou Porta aviao");
+                alert.setTitle("Fim de jogo");
+                alert.setHeaderText("Fim de jogo");
+                alert.setContentText("Jogador 2 venceu");
                 alert.showAndWait();
             }
-
-            if (val == -1) {
-                clickedButton.setStyle("-fx-background-color: white;");
-                clickedButton.setTextFill(Color.BLACK);
-                clickedButton.setDisable(true);
+            if (barcosAfundados2 == 6) {
+                GridPane1.setDisable(true);
+                GridPane2.setDisable(true);
+                ButtonReiniciar.setVisible(true);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Fim de jogo");
+                alert.setHeaderText("Fim de jogo");
+                alert.setContentText("Jogador 1 venceu");
+                alert.showAndWait();
             }
-            tabuleiro1.mostrarTabuleiro();
 
         }
+
     }
 
     private class ButtonClickHandler1 implements EventHandler<ActionEvent> {
