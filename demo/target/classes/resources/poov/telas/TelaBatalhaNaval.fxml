@@ -101,5 +101,6 @@
       <Button fx:id="ButtonPosicionar1" layoutX="469.0" layoutY="809.0" mnemonicParsing="false" onAction="#ButtonPosicionarClicado1" prefHeight="41.0" prefWidth="101.0" style="-fx-background-color: green;" text="Posicionar" visible="false" />
       <Button fx:id="ButtonPosicionar2" layoutX="709.0" layoutY="809.0" mnemonicParsing="false" onAction="#ButtonPosicionar2Clicado" prefHeight="41.0" prefWidth="101.0" style="-fx-background-color: green;" text="Posicionar" visible="false" />
       <Button fx:id="ButtonIsVertical" layoutX="601.0" layoutY="219.0" mnemonicParsing="false" onAction="#ButtonIsVerticalClicado" prefHeight="41.0" prefWidth="136.0" text="LATERAL/VERTICAL" />
+      <Button fx:id="ButtonReiniciar" layoutX="601.0" layoutY="353.0" mnemonicParsing="false" onAction="#ButtonReiniciarClicado" prefHeight="41.0" prefWidth="136.0" text="Reiniciar?" visible="false" />
    </children>
 </AnchorPane>
